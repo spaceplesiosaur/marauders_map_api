@@ -5,7 +5,7 @@ BIG_STRING = 60000
 class Character(models.Model):
     name = models.CharField(max_length=BIG_STRING)
     connections = models.ManyToManyField("self", through="Connection")
-    image = models.ImageField()
+    image = models.ImageField(null=True)
 
     class Meta:
         ordering = ['name']
@@ -19,16 +19,15 @@ class Character(models.Model):
             'id': self.id,
             #'connections': [character.name for character in self.connections.all()],
             'allies': [
-                        connection.to_character.name
+                        {"name": connection.to_character.name, "id": connection.to_character.id}
                             for connection
                             in Connection.objects.filter(from_character=self, is_ally=True)
                             ],
             'enemies': [
-                        connection.to_character.name
+                        {"name": connection.to_character.name, "id": connection.to_character.id}
                             for connection
                             in Connection.objects.filter(from_character=self, is_enemy=True)
                             ],
-            'image': self.image.url
         }
 
 
