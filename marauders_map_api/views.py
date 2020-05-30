@@ -50,10 +50,11 @@ def single_character(request, character_id):
         body = json.loads(request.body)
 
         chosen_character.name = body["name"]
-        chosen_character.allies = body["allies"]
-        chosen_character.enemies = body["enemies"]
+        # chosen_character.allies = body["allies"]
+        # chosen_character.enemies = body["enemies"]
         chosen_character.save()
-
+        new_allies = [Connection.objects.create(from_character=chosen_character, to_character=_find_connection(a), is_ally=True) for a in body["allies"]]
+        new_enemies = [Connection.objects.create(from_character=chosen_character, to_character=_find_connection(e), is_enemy=True) for e in body["enemies"]]
         output = json.dumps(chosen_character.as_JSON())
         return HttpResponse(output)
 
