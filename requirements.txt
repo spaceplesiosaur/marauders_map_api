@@ -1,4 +1,4 @@
 django
 psycopg2-binary
 pillow
-dj-database-urls
+dj-database-url
