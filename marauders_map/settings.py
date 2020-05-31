@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'f_h2=n_$3+a14e%td3=-#&-7q4rsswbm(v*wv*i&wp72xhdcf6'
+# SECRET_KEY = 'f_h2=n_$3+a14e%td3=-#&-7q4rsswbm(v*wv*i&wp72xhdcf6'
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "moose")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["ec2-54-146-68-164.compute-1.amazonaws.com"]
 
 
 # Application definition
@@ -75,11 +77,13 @@ WSGI_APPLICATION = 'marauders_map.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'marauders_map',
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql',
+    #     'NAME': 'marauders_map',
+    # }
+    'default': dj_database_url.config(default="postgres:///marauders_map")
 }
+
 
 
 # Password validation
